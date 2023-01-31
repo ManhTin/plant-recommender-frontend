@@ -15,20 +15,6 @@ export default function SetupProfile() {
     const [question, setQuestion] = useState(0)
     const [profile, setProfile] = useState({liked_plants: []})
     const [quizState, setQuizState] = useState(0)
-    const question_test = [
-        {
-            no: 1,
-            left: 'https://uploads-ssl.webflow.com/5f555a41822a92ae93ebb80d/61f0a214a2cb9abf31a7576a_moth%20orchid-export.png',
-            right: 'https://uploads-ssl.webflow.com/5f555a41822a92ae93ebb80d/61f0a23294ace3f195702a61_nerve%20plant-export.png',
-            result: {attr: "height", left: "small", right: "large"}
-        },
-        {
-            no: 2,
-            left: 'https://uploads-ssl.webflow.com/5f555a41822a92ae93ebb80d/61f0a2e526c86c4d5a96a9d3_croton%20mammy-export.png',
-            right: 'https://uploads-ssl.webflow.com/5f555a41822a92ae93ebb80d/61f0a30c459463e88e16b02b_pencil%20cactus-export.png',
-            result: {attr: "humidity", left: "high", right: "low"}
-        }
-    ]
     const comparison_test = [
       {left: 1, right: 2},
       {left: 3, right: 4},
@@ -218,7 +204,7 @@ export default function SetupProfile() {
               emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
             {value !== null && (
-              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+              <Box sx={{ ml: 2, width: 90 }}>{labels[hover !== -1 ? hover : value]}</Box>
             )}
           </Container>
             </Paper>
@@ -245,10 +231,17 @@ export default function SetupProfile() {
                 />
             </Paper>
             <Paper>
-                Do you have pets? <Switch sx={{mt: 1, mb: 1}} name="pets" inputProps={{ 'aria-label': 'pets' }} value={pets} onChange={(e) => setPets(e.target.value)}/>
+              <Stack direction="row" spacing={1} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                Do you have pets? 
+                <Switch name="pets" inputProps={{ 'aria-label': 'pets' }} value={pets} onChange={(e) => setPets(e.target.value)}/>
+              </Stack>
+                {/*Do you have pets? <Switch sx={{mt: 1, mb: 1}} name="pets" inputProps={{ 'aria-label': 'pets' }} value={pets} onChange={(e) => setPets(e.target.value)}/>*/}
             </Paper>
-            <Paper>
-                Are you ok with occasionally spraying your plants with water?  <Switch sx={{mt: 1, mb: 1}} name="spray" inputProps={{ 'aria-label': 'water' }} defaultChecked value={spray} onChange={(e) => setSpray(e.target.value)}/>
+            <Paper >
+              <Stack direction="row" spacing={1} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                Would you spray you plants with water?
+                <Switch name="spray" inputProps={{ 'aria-label': 'water' }} defaultChecked value={spray} onChange={(e) => setSpray(e.target.value)}/>
+              </Stack>
             </Paper>
             </Stack>
             <Button variant="outlined" color="secondary" type="submit" sx={{mt: 2}}>Save</Button>
@@ -272,7 +265,7 @@ export default function SetupProfile() {
       }
 
       return(
-      <Stack spacing={1}>
+      <Stack spacing={1} sx={{maxWidth: 350}}>
         <Typography variant='body2'>
           Please tell us what plants you already have
         </Typography>
@@ -284,12 +277,15 @@ export default function SetupProfile() {
           renderInput={(params) => <TextField {...params} label="Plant" />}
           onChange={(event, newValue) => {addNewPlant(newValue)}}
           sx={{mb: 2}}
+          disableClearable      
         />
-        <Stack direction="row" spacing={1} sx={{display: "flex", justifyContent: "center"}}>
+        {/*<Stack direction="row" spacing={1} sx={{display: "flex", justifyContent: "center"}}>*/}
+        <Grid container spacing={1}>
           {choosenPlants.map(plant => {
-            return <Chip label={plant.name} variant="outlined" sx={{mr:1}} onClick={(e) => {setChoosenPlants(choosenPlants.filter(e => plant.id !== e.id))}}/>
+            return <Grid xs={4}><Chip label={plant.name} variant="outlined" sx={{mr:1}} onClick={(e) => {setChoosenPlants(choosenPlants.filter(e => plant.id !== e.id))}}/></Grid>
           })}
-        </Stack>
+        </Grid>
+        {/*</Stack>*/}
         <Button variant="outlined" color="secondary" type="submit" sx={{mt: 2}} onClick={save}>Save</Button>
       </Stack>
       )
