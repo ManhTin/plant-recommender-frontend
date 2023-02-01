@@ -14,6 +14,7 @@ export default function SetupProfile() {
     const [profile, setProfile] = useState({liked_plants: []})
     const [quizState, setQuizState] = useState(0)
     const [comparison_test, setComparison_test] = useState([])
+    const [width, setWidth] = useState(window.innerWidth);
     const test = [
       {left: 1, right: 2},
       {left: 3, right: 4},
@@ -25,6 +26,7 @@ export default function SetupProfile() {
 
 
     const theme = useTheme();
+    const isMobile = width <= 768;
 
     useEffect(() => {
       async function getComp() {
@@ -33,15 +35,21 @@ export default function SetupProfile() {
           setComparison_test(recs)            
       }
       getComp()
+      window.addEventListener('resize', handleWindowSizeChange);
+      return () => {
+          window.removeEventListener('resize', handleWindowSizeChange);
+      }
     }, [])
 
-
+    function handleWindowSizeChange() {
+      setWidth(window.innerWidth);
+    }
 
     const AvatarImage = (props) => {
         return (
             <Box
             component="img"
-            sx={{ width: 300 }}
+            sx={{ maxWidth: isMobile ? 1 : 9/16 }}
             alt="plant_image"
             src={props.side === "left" ? plants.find(e => e.id === comparison_test[question].left).image_url : plants.find(e => e.id === comparison_test[question].right).image_url}
             />
@@ -273,7 +281,7 @@ export default function SetupProfile() {
       }
 
       return(
-      <Stack spacing={1} sx={{maxWidth: 350}}>
+      <Stack spacing={1} sx={{maxWidth: 450}}>
         <Typography variant='body2'>
           Please tell us what plants you already have
         </Typography>

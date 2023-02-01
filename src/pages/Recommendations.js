@@ -187,19 +187,19 @@ export default function Recommendations(props) {
         }
 
         return (
-            <Grid xs={4}>
-            <Card sx={{ minWidth: 275 }} onClick={handleClickOpen}>
+            <Grid xs={12} sm={4} md={4}>
+            <Card sx={{}} onClick={handleClickOpen}>
                 <Box sx={{display: "flex", justifyContent: "center"}}>
                 <CardMedia
                     component="img"
-                    sx={{width: 200, alignSelf: "center"}}
+                    sx={{maxWidth: 200, alignSelf: "center"}}
                     image={props.plant.image_url}
                     alt={props.plant.name}
                 />
                 </Box>
 
                 <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    <Typography color="text.secondary" gutterBottom>
                     {props.plant.official_name}
                     </Typography>
                     <Typography variant="h5" component="div">
