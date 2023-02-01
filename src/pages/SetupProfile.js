@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react'
-import './App.css';
-import PocketBase from 'pocketbase';
 import { useNavigate } from 'react-router-dom';
-import { Chip, Tabs, Tab, Container, List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography, Divider, LinearProgress, IconButton, Box, TextField, Button, Rating, Stack, Autocomplete, Switch } from '@mui/material';
+import { Chip, Container, Typography, Box, TextField, Button, Rating, Stack, Autocomplete, Switch } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTheme, styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import StarIcon from '@mui/icons-material/Star';
 import plants from '../plants_names.json'
+import { apicallGet } from '../callApi';
 
 export default function SetupProfile() {
-    const pb = new PocketBase('https://base.jn2p.de');
     const navigate = useNavigate()
     const [question, setQuestion] = useState(0)
     const [profile, setProfile] = useState({liked_plants: []})
     const [quizState, setQuizState] = useState(0)
-    const comparison_test = [
+    const [comparison_test, setComparison_test] = useState([])
+    const test = [
       {left: 1, right: 2},
       {left: 3, right: 4},
       {left: 5, right: 6},
@@ -24,17 +23,25 @@ export default function SetupProfile() {
     ]
 
 
+
     const theme = useTheme();
 
     useEffect(() => {
-        console.log(question)
-      })
+      async function getComp() {
+          const url = '/api/plant_pairs'
+          const recs = await apicallGet('GET', url)          
+          setComparison_test(recs)            
+      }
+      getComp()
+    }, [])
+
+
 
     const AvatarImage = (props) => {
         return (
             <Box
             component="img"
-            sx={{ width: 400 }}
+            sx={{ width: 300 }}
             alt="plant_image"
             src={props.side === "left" ? plants.find(e => e.id === comparison_test[question].left).image_url : plants.find(e => e.id === comparison_test[question].right).image_url}
             />
@@ -254,6 +261,7 @@ export default function SetupProfile() {
       const [choosenPlants, setChoosenPlants] = useState([])
 
       const addNewPlant = plant => {
+        console.log("oning plant: ", plant)
         setChoosenPlants([
           ...choosenPlants,
           plant
